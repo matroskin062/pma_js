@@ -1,59 +1,34 @@
-const betweenNumbers = (n, m) => {
-  if (!isNaN(n) && !isNaN(m)) {
-    let min = 0;
-    let max = 0;
-    if (n > m && n - m > 1) {
-      min = Math.floor(m);
-      max = Math.floor(n);
-      for (let i = min + 1; i < max; i++) {
-        console.log(i);
-      }
-    } else if (n < m && m - n > 1) {
-      min = Math.floor(n);
-      max = Math.floor(m);
-      for (let i = min + 1; i < max; i++) {
-        console.log(i);
-      }
-    } else {
-      console.log('no numbers between');
-    }
-  } else {
-    console.log('Invalid Value!');
-  }
-};
-
-const toPower = (number, power = 2) => number ** power;
-
-const toPower2 = function (number, power = 2) {
-  return number ** power;
-};
-
-const round = (n, m) => {
-  if (!isNaN(m) && !isNaN(n)) {
+const round = () => {
+  const n = prompt('Input first number');
+  const m = prompt('Input second number');
+  if (!isNaN(m) && !isNaN(n) && n.trim() !== '' && m.trim !== '') {
+    alert('Result in Console!');
     console.log(Math.round(n * 0.3));
     console.log(Math.round(m * 0.3));
   } else {
-    console.log('Invalid Input');
+    alert('Invalid Input');
   }
 };
 
-const randomNumber = (n, m) => {
-  if (!isNaN(n) && !isNaN(m)) {
+const randomNumber = () => {
+  const n = prompt('Input first number');
+  const m = prompt('Input second number');
+  if (!isNaN(n) && !isNaN(m) && n.trim() !== '' && m.trim !== '') {
     let min = 0;
     let max = 0;
 
-    if ((n > m, n - m > 1)) {
+    if (n > m) {
       min = m;
       max = n;
-      console.log(Math.round(min - 0.5 + Math.random() * (max - min + 1)));
-    } else if ((n < m, m - n > 1)) {
+    } else if (n < m) {
       min = n;
       max = m;
-      console.log(Math.round(min - 0.5 + Math.random() * (max - min + 1)));
     } else {
       console.log('no numbers between');
     }
+    alert('Result in Console!');
+    console.log(Math.round(min - 0.5 + Math.random() * (max - min + 1)));
   } else {
-    console.log('Invalid Input');
+    alert('Invalid Input');
   }
 };
