@@ -13,6 +13,12 @@ const loadFiles = () => {
   const fileBlocks = document.querySelectorAll('.file');
   fileBlocks.forEach((element) => {
     element.addEventListener('contextmenu', openCtxMenuOnFile);
+    element.draggable = true;
+    element.addEventListener('dragstart', dragStart);
+    element.addEventListener('dragover', dragOver);
+    element.addEventListener('drop', drop);
+    element.addEventListener('click', multiSelection);
+    element.addEventListener('dragend', dragEnd);
   });
 };
 
@@ -60,8 +66,14 @@ document
   .addEventListener('contextmenu', openCtxMenuOnDocument);
 
 document.addEventListener('click', () => {
-  closeCtxMenuOnFile();
-  closeCtxMenuAddFile();
+  closeMenus();
+  document
+    .querySelectorAll('.file')
+    .forEach((el) => el.classList.remove('selected'));
+});
+
+document.addEventListener('dragstart', () => {
+  closeMenus();
 });
 
 document.querySelector('[data-delete]').addEventListener('click', deleteFile);
@@ -69,14 +81,22 @@ document.querySelector('[data-rename]').addEventListener('click', renameFile);
 
 document.querySelector('[data-create]').addEventListener('click', createFile);
 
+function closeMenus() {
+  closeCtxMenuOnFile();
+  closeCtxMenuAddFile();
+}
 function createFile(e) {
   e.stopPropagation();
   const title = prompt('Enter File Title');
   if (title.trim()) {
-    files.push(title);
-    loadFiles();
-    closeCtxMenuAddFile();
+    if (!files.includes(title)) {
+      files.push(title);
+      loadFiles();
+    } else {
+      alert('File with this name already exists!');
+    }
   }
+  closeCtxMenuAddFile();
 }
 
 function deleteFile() {
@@ -89,4 +109,35 @@ function renameFile() {
   const newTitle = prompt('Enter new title');
   files[curElIdx] = newTitle;
   loadFiles();
+}
+
+function dragStart(e) {
+  currentElem = e.target;
+  currentElem.classList.add('selected');
+}
+
+function dragEnd() {
+  currentElem.classList.remove('selected');
+}
+
+function dragOver(e) {
+  e.preventDefault();
+}
+
+function drop(e) {
+  if (currentElem !== this) {
+    const text = this.innerText;
+    this.innerText = currentElem.innerText;
+    currentElem.innerText = text;
+    document.querySelectorAll('.file').forEach((el, i) => {
+      files[i] = el.innerText;
+    });
+  }
+}
+
+function multiSelection(e) {
+  e.stopPropagation();
+  if (e.ctrlKey || e.metaKey) {
+    e.target.classList.toggle('selected');
+  }
 }

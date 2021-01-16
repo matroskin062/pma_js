@@ -24,7 +24,7 @@
 
 .file:hover {
   cursor: pointer;
-  background-color: lightgray;
+  /* background-color: lightgray; */
 }
 
 .ctx-menu {
@@ -49,4 +49,8 @@
   width: 100%;
   background-color: lightgray;
   cursor: pointer;
+}
+
+.selected {
+  background-color: aquamarine;
 }
