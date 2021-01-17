@@ -85,6 +85,7 @@ function closeMenus() {
   closeCtxMenuOnFile();
   closeCtxMenuAddFile();
 }
+
 function createFile(e) {
   e.stopPropagation();
   const title = prompt('Enter File Title');
@@ -107,8 +108,12 @@ function deleteFile() {
 function renameFile() {
   const curElIdx = files.findIndex((el) => el === currentElem);
   const newTitle = prompt('Enter new title');
-  files[curElIdx] = newTitle;
-  loadFiles();
+  if (newTitle.trim()) {
+    files[curElIdx] = newTitle;
+    loadFiles();
+  } else {
+    alert('Filename cannot be empty');
+  }
 }
 
 function dragStart(e) {
@@ -124,7 +129,7 @@ function dragOver(e) {
   e.preventDefault();
 }
 
-function drop(e) {
+function drop() {
   if (currentElem !== this) {
     const text = this.innerText;
     this.innerText = currentElem.innerText;
