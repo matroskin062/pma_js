@@ -67,9 +67,10 @@ document
 
 window.addEventListener('click', () => {
   closeMenus();
-  document
-    .querySelectorAll('.file')
-    .forEach((el) => el.classList.remove('selected'));
+  document.querySelectorAll('.file').forEach((el) => {
+    el.classList.remove('selected');
+    el.dataset.selected = 'false';
+  });
 });
 
 document.addEventListener('dragstart', () => {
@@ -103,7 +104,7 @@ function createFile(e) {
 }
 
 function deleteFile() {
-  const selected = document.querySelectorAll('[data-selected]');
+  const selected = document.querySelectorAll('[data-selected="true"]');
   if (selected.length) {
     files = [...selected].filter((el, i) => el.innerText !== files[i]);
     loadFiles();
@@ -152,6 +153,8 @@ function multiSelection(e) {
   e.stopPropagation();
   if (e.ctrlKey || e.metaKey) {
     e.target.classList.toggle('selected');
-    e.target.dataset.selected = 'true';
+    if (e.target.classList.contains('selected'))
+      e.target.dataset.selected = 'true';
+    else e.target.dataset.selected = 'false';
   }
 }
