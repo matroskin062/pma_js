@@ -46,7 +46,7 @@ function openCtxMenuOnFile(e) {
   closeContextMenu(addMenu);
 }
 
-function closeCtxMenuOnFile() {
+function closeCtxMenuOnFile(e) {
   closeContextMenu(onFileMenu);
 }
 
@@ -65,7 +65,7 @@ document
   .querySelector('.container')
   .addEventListener('contextmenu', openCtxMenuOnDocument);
 
-document.addEventListener('click', () => {
+window.addEventListener('click', () => {
   closeMenus();
   document
     .querySelectorAll('.file')
@@ -96,13 +96,21 @@ function createFile(e) {
     } else {
       alert('File with this name already exists!');
     }
+  } else {
+    alert('Filename cannot be empty');
   }
   closeCtxMenuAddFile();
 }
 
 function deleteFile() {
-  files = files.filter((el) => el !== currentElem);
-  loadFiles();
+  const selected = document.querySelectorAll('[data-selected]');
+  if (selected.length) {
+    files = [...selected].filter((el, i) => el.innerText !== files[i]);
+    loadFiles();
+  } else {
+    files = files.filter((el) => el !== currentElem);
+    loadFiles();
+  }
 }
 
 function renameFile() {
@@ -144,5 +152,6 @@ function multiSelection(e) {
   e.stopPropagation();
   if (e.ctrlKey || e.metaKey) {
     e.target.classList.toggle('selected');
+    e.target.dataset.selected = 'true';
   }
 }
