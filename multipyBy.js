@@ -1,7 +1,7 @@
 const assert = require('assert');
 
-const multiplyBy = (num, ...rest) => {
-  return rest.map((el) => num * el);
+const multiplyBy = (num, ...multipliers) => {
+  return multipliers.map((el) => num * el);
 };
 
 assert.deepStrictEqual(multiplyBy(2, 3, 4, 5), [6, 8, 10]);
