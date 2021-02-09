@@ -1,0 +1,9 @@
+{
+  "dependencies": {},
+  "name": "pma_js",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:matroskin062/pma_js.git",
+  "author": "Dima Matroskin <dima.matroskin062@gmail.com>",
+  "license": "MIT"
+}
