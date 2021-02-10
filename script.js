@@ -1,40 +1,6 @@
 const input = document.querySelector('input');
 const button = document.querySelector('button');
 const autocomplete = document.querySelector('.autocomplete__items');
-let autocompleteItems;
-
-const debounce = (fn, delay = 1000) => {
-  let timeout;
-  return (...args) => {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => fn(...args), delay);
-  };
-};
-const getUsers = async (login) => {
-  const { data } = await axios.get(`https://api.github.com/search/users`, {
-    params: {
-      q: login,
-      per_page: 5,
-    },
-  });
-  return data.items;
-};
-
-const getUser = async (login) => {
-  const { data } = await axios.get(`https://api.github.com/users/${login}`);
-
-  return data;
-};
-
-const getFollowers = async (followers_url) => {
-  const { data } = await axios.get(followers_url);
-  return data;
-};
-
-const getRepositories = async (repos_url) => {
-  const { data } = await axios.get(repos_url);
-  return data;
-};
 
 const renderAutocomplete = (users, inputVal) => {
   users.map(({ login }) => {
@@ -46,6 +12,17 @@ const renderAutocomplete = (users, inputVal) => {
   });
 };
 
+const repo = (el) => {
+  return `
+      <a href='${el.html_url}' target='blank'>
+        <div class='repos__card'>
+          <p class='repos__card-title'>${el.name}</p>
+          <p class='repos__card-desc'>${el.description || 'no description'}</p>
+        </div>
+      </a>
+      `
+}
+
 const renderRepositories = async (url) => {
   const repos = await getRepositories(url);
   const reposBlock = document.querySelector('.repos');
@@ -53,17 +30,21 @@ const renderRepositories = async (url) => {
   repos.length
     ? repos.map(
         (el) =>
-          (reposBlock.innerHTML += `
-      <a href='${el.html_url}' target='blank'>
-        <div class='repos__card'>
-          <p class='repos__card-title'>${el.name}</p>
-          <p class='repos__card-desc'>${el.description || 'no description'}</p>
-        </div>
-      </a>
-      `)
+          (reposBlock.innerHTML += repo(el))
       )
     : (reposBlock.innerHTML = 'no repos');
 };
+
+const follower = (el) => {
+  return `
+    <a href='${el.html_url}' target='blank'>
+      <div class='followers__card'>
+        <img src='${el.avatar_url}' alt="${el.login}"/>
+        <p class='followers__login'>${el.login}</p>
+      </div>
+    </a>
+  `
+}
 
 const renderFollowers = async (url) => {
   const followers = await getFollowers(url);
@@ -72,22 +53,29 @@ const renderFollowers = async (url) => {
   followers.length
     ? followers.map(
         (el) =>
-          (followersBlock.innerHTML += `
-  <a href='${el.html_url}' target='blank'>
-    <div class='followers__card'>
-      <img src='${el.avatar_url}'/>
-      <p class='followers__login'>${el.login}</p>
-    </div>
-  </a>
-  `)
+          (followersBlock.innerHTML += follower(el))
       )
     : (followersBlock.innerHTML = 'no followers');
 };
 
+const renderProfile = async (login) => {
+  try {
+    const user = await getUser(login);
+    input.value = '';
+    document.querySelector('.no-user').style.display = 'none';
+    document.querySelector('.profile').style.display = 'flex';
+    await renderRepositories(user.repos_url);
+    await renderFollowers(user.followers_url);
+  }catch (e){
+    document.querySelector('.no-user').style.display = 'block';
+  }
+  autocomplete.style.display = 'none';
+};
+
 const handleAutocompleteClick = () => {
-  document.querySelectorAll('.autocomplete__items p').forEach((el) => {
-    el.addEventListener('click', async (e) => {
-      renderProfile(e.target.innerText);
+  [...document.querySelectorAll('.autocomplete__items p')].map((el) => {
+    el.addEventListener('click',  async (e) => {
+      await renderProfile(e.target.innerText);
     });
   });
 };
@@ -105,21 +93,9 @@ input.addEventListener(
         handleAutocompleteClick();
       }
     }
-  }, 1000)
+  }, 500)
 );
 
-const renderProfile = async (login) => {
-  document.querySelector('.profile').style.display = 'flex';
-
-  const user = await getUser(login);
-  input.value = '';
-  await renderRepositories(user.repos_url);
-  await renderFollowers(user.followers_url);
-  setTimeout(() => {
-    autocomplete.style.display = 'none';
-  }, 200);
-};
-
 button.addEventListener('click', async () => {
-  renderProfile(input.value);
+  await renderProfile(input.value);
 });

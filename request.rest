@@ -1,2 +1,0 @@
-GET https://api.github.com/users/matroskin062
-

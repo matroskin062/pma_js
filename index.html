@@ -5,13 +5,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css" />
+    <script src="util.js" defer></script>
+    <script src="./api.js" defer></script>
     <script src="./script.js" defer></script>
     <title>Document</title>
   </head>
   <body>
     <div class="autocomplete">
-      <input type="text" />
-      <button>Search</button>
+      <div class="form" >
+        <input type="text" />
+        <button>Search</button>
+      </div>
       <div class="autocomplete__items"></div>
     </div>
     <div class="profile">
@@ -23,6 +27,9 @@
         <h1>Followers</h1>
         <div class="followers"></div>
       </div>
+    </div>
+    <div class="no-user">
+      <h1>No such user</h1>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.20/lodash.min.js"></script>
