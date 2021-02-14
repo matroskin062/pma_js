@@ -22,3 +22,10 @@ export const getLangColor = (lang) => {
     return App.colors[lang].color;
   }
 };
+
+export const validateInput = (input) => {
+  if (input.trim().match(/^([0-9a-zA-Z\-])*$/g)) {
+    return true;
+  }
+  return false;
+};

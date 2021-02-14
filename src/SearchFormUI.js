@@ -1,4 +1,4 @@
-import { debounce } from './utils';
+import { debounce, validateInput } from './utils';
 import Api from './Api';
 import User from './User';
 class SearchForm {
@@ -13,7 +13,7 @@ class SearchForm {
 
   async renderAutocomplete(e) {
     if (e.target.value.trim().length > 0) {
-      if (!this.validateInput(e.target.value)) {
+      if (!validateInput(e.target.value)) {
         this.renderInvalidInput(e.target.value);
         return;
       }
@@ -56,15 +56,8 @@ class SearchForm {
     this.autocomplete.append(p);
   }
 
-  validateInput(input) {
-    if (input.trim().match(/^([0-9a-zA-Z\-])*$/g)) {
-      return true;
-    }
-    return false;
-  }
-
   searchHandler(login) {
-    if (this.validateInput(login)) {
+    if (validateInput(login)) {
       User.getUserData(login);
       this.input.value = '';
       this.autocomplete.classList.add('hide');
