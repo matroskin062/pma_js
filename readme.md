@@ -1,6 +1,6 @@
-#Task with GitHub API for Parimatch Tech Academy
+# Task with GitHub API for Parimatch Tech Academy
 
-#Getting Started
+# Getting Started
 
 Clone repo:
 
